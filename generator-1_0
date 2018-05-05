@@ -83,7 +83,7 @@ for (i in data) {
 //create the HTML file and send the email
 var email = buildEmail(groupTables);
 saveEmail(email, work_folder);//comment this if you dont want the output HTML file
-//GmailApp.sendEmail("e.k.hatfield@student.tudelft.nl", "Final Test", "testing", {htmlBody: email});
+//GmailApp.sendEmail("email@email.com", "Final Test", "testing", {htmlBody: email});
 
 //copy the data from the Forms Sheet to the Archive Sheet
 updateArchive(full_data_range, form_sheet_id, archive_sheet_id);
