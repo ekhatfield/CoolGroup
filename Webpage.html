@@ -1,0 +1,196 @@
+<!--
+
+-if you dont have a div inside a div the whole table will disappear after a click
+
+-delete handlers after 1 use?
+
+-->
+<!DOCTYPE html>
+<html>
+<head>
+   <base target="_top">
+<style>
+table {
+    width: 600px;
+	/*height: 400px;*/
+    margin: 0; 
+    border-collapse: collapse;
+    font-family: arial;
+    table-layout: fixed;
+}
+
+/*reports table definition*/
+#CGReports th, #CGReports td {
+    height: 49px;
+    padding: 12.5px;
+    /*margin: 0;*/
+    vertical-align: middle;
+    text-align: center; 
+}
+#CGReports th {
+  background-color: #00A6D6;
+  color: white;
+  font-size: 125%;
+}
+/*describe the custom input elements*/
+input[type="button"] {
+    background-color: #00A6D6;
+    color: #fff;
+    width: 225px; /* width of image */
+    height: 50px; /* height of image */
+    border: 2px solid #fff;
+    font-family: arial;
+    font-size: 100%;
+    font-weight: bold;
+    border-radius: 6px 6px 6px 6px;
+}
+
+input[type=checkbox].css-checkbox {/*margin or sthg needs to be fixed*/
+	position:absolute; 
+    z-index:-1000; 
+    left:-1000px; 
+    overflow: hidden; 
+    clip: rect(0 0 0 0); 
+    height:1px; width:1px; 
+    margin:-1px; 
+    padding:0; 
+    border:0;
+}
+
+input[type=checkbox].css-checkbox + label.css-label, input[type=checkbox].css-checkbox + label.css-label.clr {
+	padding-left:55px;
+	height:50.4px; 
+	display:inline-block;
+	line-height:50px;
+	background-repeat:no-repeat;
+	background-position: 0 0;
+	font-size:50px;
+	vertical-align:middle;
+	cursor:pointer;
+
+}
+
+input[type=checkbox].css-checkbox:checked + label.css-label, input[type=checkbox].css-checkbox + label.css-label.chk {
+	background-position: 0 -50px;
+}
+label.css-label {
+	background-image:url(http://csscheckbox.com/checkboxes/u/csscheckbox_feef178dfbea01689537ae950e54fb64.png);
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+</style>
+</head>
+
+<body>
+
+<div style="overflow-x:auto;" align="center">
+<div id="CGNewsletter" style="width: 300px; height: 100px" align="center"></div>
+<h2 style="width: 600px; font-family:arial;text-align: center;">CoolGroup Newsletter Generator Version 3:<br>The Return Of The GUI</h2>
+
+<table id="CGReports">
+  <tr>
+    <th style="border-radius: 6px 6px 0 0;" colspan="2"> <input type="button" id="Reminder" value="Send Reminder Email"></th>
+  </tr>
+  <tr style="background-color: #ccc;" >
+    <td style="text-align: left;"><b>&emsp;&emsp;&emsp;Sort Names?</b></td>
+    <td><input id="Sort" name="Sort" value="true" type="checkbox" class="css-checkbox"><label for="Sort" class="css-label radGroup1"></label></td>
+  </tr>
+  <tr style="background-color: #ccc; border-top: 2px solid #fff; border-bottom: 2px solid #fff;" >
+    <td style="text-align: left;" max-height="49px"><b>&emsp;&emsp;&emsp;Add Announcement?</b></td>
+    <td><input id="Announcement" name ="Announcement" value="true" type="checkbox" class="css-checkbox"><label for="Announcement" class="css-label radGroup1"></label></td>
+  </tr>
+  <tr style="background-color: #ccc;">
+  	<td style="text-align: left; max-height: 49;"><b>&emsp;&emsp;&emsp;Add Comic?</b></td>
+  	<td><input id="Comic" name="Comic" value="true" type="checkbox" class="css-checkbox" checked><label for="Comic" class="css-label radGroup1"></label></td>
+  </tr>
+  <tr>
+    <th colspan="2"><input type="button" id="PickComic" value="Pick a New Comic"></th>
+  </tr>
+  <tr>
+    <th colspan="2"><input type="button" id="Test" value="Send Test Email"></th>
+  </tr>
+  <tr>
+    <th style="border-radius: 0 0 6px 6px;" colspan="2"><input type="button" id="Newsletter" value="Send Newsletter"></th>
+  </tr>
+</table>
+
+<script>
+    /*---make event listeners--*/
+    document.getElementById('Reminder').addEventListener('click', SendReminder);//execute on change in reminder
+    document.getElementById('PickComic').addEventListener('click', ShuffleComics);
+    document.getElementById('Test').addEventListener('click', SendTest);//execute on change in test
+    document.getElementById('Newsletter').addEventListener('click', SendNewsletter);//execute on change in newsletter
+    
+    /*---define success handler--*/
+    function success()
+    {
+      var message = [
+        '<table style="font-family:arial; border-collapse: collapse; width: 300px; height: 100px; margin-left: 0;">',
+        '<tr>',
+        '<td style="background-color: #33cc33; color: white; border-radius: 10px 10px 10px 10px; font-size: 125%" align="center">',
+        '<b>Email Sent Successfully!</b>',
+        '</td>',
+        '</tr>',
+        '</table>'
+        ].join('\n')
+      document.getElementById('CGNewsletter').innerHTML = message;
+    }
+    
+    /*---define failure handler--*/
+    function failure(error)
+    {
+      var message = [
+        '<table style="font-family:arial; border-collapse: collapse; width: 300px; height: 100px; margin-left: 0;">',
+        '<tr>',
+        '<td style="background-color: #ff0000; color: white; border-radius: 10px 10px 0 0; font-size: 125%" align="center">',
+        '<b>Failed to send the Email!</b>',
+        '</td>',
+        '</tr>',
+        '<tr>',
+        '<td style="background-color: #ff0000; color: white; border-radius: 0 0 10px 10px;" align="center">',
+        'Error Report: ' + error.message,
+        '</td>',
+        '</tr>',
+        '</table>'
+        ].join('\n')
+      document.getElementById('CGNewsletter').innerHTML = message;
+      google.script.run.errorEmail(error.message);
+    }
+    
+    /*---functions that call the backend code---*/
+    function ShuffleComics()
+    {
+      google.script.run.shuffleSheet();
+    }
+    function SendReminder()
+    {
+      document.getElementById('CGNewsletter').innerHTML = "Sending Reminder Email...";
+      google.script.run.withFailureHandler(failure).withSuccessHandler(success).sendReminder();
+    }
+    function SendTest()
+    {
+      //var progress_text="Sending Test Email...";
+      var sort=document.getElementById('Sort').checked;
+      var ann=document.getElementById('Announcement').checked;
+      var comic=document.getElementById('Comic').checked;
+      document.getElementById('CGNewsletter').innerHTML = "Sending Test Email...";
+      google.script.run.withFailureHandler(failure).withSuccessHandler(success).testEmail(sort, ann, comic);
+    }
+    function SendNewsletter()
+    {
+      var sort=document.getElementById('Sort').checked;
+      var ann=document.getElementById('Announcement').checked;
+      var comic=document.getElementById('Comic').checked;
+      document.getElementById('CGNewsletter').innerHTML = "Sending Newsletter Email...";
+      google.script.run.withFailureHandler(failure).withSuccessHandler(success).sendNewsletter(sort, ann, comic);
+    }
+  </script>
+  
+<h5 style="width: 600px; font-family:arial;text-align: center;">Software Copyright © Lizzy Hatfield 2018</h5>
+</div>
+</body>
+</html>
