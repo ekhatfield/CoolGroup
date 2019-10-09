@@ -2,9 +2,7 @@
 
 -if you dont have a div inside a div the whole table will disappear after a click
 
--delete handlers after 1 use
--add in actual code
--relaunch as version 2, see if the proper URL can work
+-delete handlers after 1 use?
 
 -->
 <!DOCTYPE html>
@@ -91,7 +89,7 @@ label.css-label {
 
 <div style="overflow-x:auto;" align="center">
 <div id="CGNewsletter" style="width: 300px; height: 100px" align="center"></div>
-<h2 style="width: 600px; font-family:arial;text-align: center;">CoolGroup Newsletter Generator Version 2:<br>The Return Of The GUI</h2>
+<h2 style="width: 600px; font-family:arial;text-align: center;">CoolGroup Newsletter Generator Version 3:<br>The Return Of The GUI</h2>
 
 <table id="CGReports">
   <tr>
@@ -110,7 +108,10 @@ label.css-label {
   	<td><input id="Comic" name="Comic" value="true" type="checkbox" class="css-checkbox" checked><label for="Comic" class="css-label radGroup1"></label></td>
   </tr>
   <tr>
-    <th colspan="2"><input type="button" id="Test" value="Test Email"></th>
+    <th colspan="2"><input type="button" id="PickComic" value="Pick a New Comic"></th>
+  </tr>
+  <tr>
+    <th colspan="2"><input type="button" id="Test" value="Send Test Email"></th>
   </tr>
   <tr>
     <th style="border-radius: 0 0 6px 6px;" colspan="2"><input type="button" id="Newsletter" value="Send Newsletter"></th>
@@ -120,6 +121,7 @@ label.css-label {
 <script>
     /*---make event listeners--*/
     document.getElementById('Reminder').addEventListener('click', SendReminder);//execute on change in reminder
+    document.getElementById('PickComic').addEventListener('click', ShuffleComics);
     document.getElementById('Test').addEventListener('click', SendTest);//execute on change in test
     document.getElementById('Newsletter').addEventListener('click', SendNewsletter);//execute on change in newsletter
     
@@ -156,9 +158,14 @@ label.css-label {
         '</table>'
         ].join('\n')
       document.getElementById('CGNewsletter').innerHTML = message;
+      google.script.run.errorEmail(error.message);
     }
     
     /*---functions that call the backend code---*/
+    function ShuffleComics()
+    {
+      google.script.run.shuffleSheet();
+    }
     function SendReminder()
     {
       document.getElementById('CGNewsletter').innerHTML = "Sending Reminder Email...";
@@ -167,26 +174,23 @@ label.css-label {
     function SendTest()
     {
       //var progress_text="Sending Test Email...";
-      var sort = document.getElementById('Sort').checked;
-      var ann = document.getElementById('Announcement').checked;
-      var comic = document.getElementById('Comic').checked;
+      var sort=document.getElementById('Sort').checked;
+      var ann=document.getElementById('Announcement').checked;
+      var comic=document.getElementById('Comic').checked;
       document.getElementById('CGNewsletter').innerHTML = "Sending Test Email...";
       google.script.run.withFailureHandler(failure).withSuccessHandler(success).testEmail(sort, ann, comic);
     }
     function SendNewsletter()
     {
-      var sort = document.getElementById('Sort').checked;
-      var ann = document.getElementById('Announcement').checked;
-      var comic = document.getElementById('Comic').checked;
+      var sort=document.getElementById('Sort').checked;
+      var ann=document.getElementById('Announcement').checked;
+      var comic=document.getElementById('Comic').checked;
       document.getElementById('CGNewsletter').innerHTML = "Sending Newsletter Email...";
       google.script.run.withFailureHandler(failure).withSuccessHandler(success).sendNewsletter(sort, ann, comic);
     }
   </script>
   
-<h5 style="width: 600px; font-family:arial;text-align: center;">Software Copyright Lizzy Hatfield 2018</h5>
+<h5 style="width: 600px; font-family:arial;text-align: center;">Software Copyright © Lizzy Hatfield 2018</h5>
 </div>
 </body>
 </html>
-
-
-
