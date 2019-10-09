@@ -7,7 +7,7 @@
  * Name: CoolGroup Newsletter Generator
  * Description: Script that generates and sends weekly newsletter emails via Google Forms, Sheets, and Docs
  * Ver: 3.0
- * © Lizzy Hatfield
+ * Â© Lizzy Hatfield
 ************************************************************************************************************/
 
 
@@ -43,7 +43,7 @@
         " \_  (__   (__        [nabis]
             "-._,)--._,)
 
-© Chris Johnson, 
+Â© Chris Johnson, 
 http://www.chris.com/ascii/index.php?art=animals/rabbits
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -569,7 +569,7 @@ function buildEmail(ann, comic, groupTables, ann_doc_id, com_doc_id) {
     ann ? buildEmailAnn(ann_doc_id) : ' ',
     groupTables.join('\n'),    
     comic ? buildEmailComic(com_doc_id) : ' ',
-    '<h5 style="font-family:arial;"> Software Copyright © Lizzy Hatfield 2018 </h5>',
+    '<h5 style="font-family:arial;"> Software Copyright Â© Lizzy Hatfield 2018 </h5>',
     '</body>',
     '</html>'
   ].join('\n')
